@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.revature</groupId>
-	<artifactId>ProjectZeroFullStackOriginal</artifactId>
+	<artifactId>ProjectZeroFullStack</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -16,28 +16,38 @@
 	</properties>
 
 	<build>
+		<finalName>ProjectZeroFullStack</finalName>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>5.8.0-M1</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.7</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<id>prepare-agent</id>
 						<goals>
-							<goal>single</goal>
+							<goal>prepare-agent</goal>
 						</goals>
-						<configuration>
-							<archive>
-								<manifest>
-									<mainClass>
-										com.revature.app.Application
-									</mainClass>
-								</manifest>
-							</archive>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-						</configuration>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
