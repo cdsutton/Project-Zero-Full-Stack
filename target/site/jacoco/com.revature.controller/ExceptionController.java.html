@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExceptionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ProjectZeroFullStack</a> &gt; <a href="index.source.html" class="el_package">com.revature.controller</a> &gt; <span class="el_source">ExceptionController.java</span></div><h1>ExceptionController.java</h1><pre class="source lang-java linenums">package com.revature.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.revature.controller.ExceptionController;
+import com.revature.dto.MessageDTO;
+import com.revature.exceptions.AccountNotFoundException;
+import com.revature.exceptions.AddAccountException;
+import com.revature.exceptions.AddRealtorException;
+import com.revature.exceptions.BadParameterException;
+import com.revature.exceptions.DatabaseException;
+import com.revature.exceptions.NotRealtorsAccountException;
+import com.revature.exceptions.RealtorNotFoundException;
+
+import io.javalin.Javalin;
+import io.javalin.http.ExceptionHandler;
+
+<span class="nc" id="L19">public class ExceptionController implements Controller {</span>
+	
+<span class="nc" id="L21">private Logger logger = LoggerFactory.getLogger(ExceptionController.class);</span>
+	
+<span class="nc" id="L23">	private ExceptionHandler&lt;AccountNotFoundException&gt; accountNotFoundExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L24">		logger.warn(&quot;A user tried to retrieve an account, but it was not found. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L25">		ctx.status(404);</span>
+<span class="nc" id="L26">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L27">	};</span>
+	
+<span class="nc" id="L29">	private ExceptionHandler&lt;AddAccountException&gt; addAccountExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L30">		logger.warn(&quot;Could not add account. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L31">		ctx.status(400);</span>
+<span class="nc" id="L32">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L33">	};</span>
+	
+<span class="nc" id="L35">	private ExceptionHandler&lt;AddRealtorException&gt; addRealtorExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L36">		logger.warn(&quot;Could not add realtor. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L37">		ctx.status(400);</span>
+<span class="nc" id="L38">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L39">	};</span>
+	
+<span class="nc" id="L41">	private ExceptionHandler&lt;BadParameterException&gt; badParameterExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L42">		logger.warn(&quot;A user provided a bad parameter. Exception message is: \n&quot; + e.getMessage());</span>
+<span class="nc" id="L43">		ctx.status(400);</span>
+<span class="nc" id="L44">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L45">	};</span>
+	
+<span class="nc" id="L47">	private ExceptionHandler&lt;DatabaseException&gt; databaseExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L48">		logger.error(&quot;Could not connect to database. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L49">		ctx.status(500);</span>
+<span class="nc" id="L50">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L51">	};</span>
+	
+<span class="nc" id="L53">	private ExceptionHandler&lt;NotRealtorsAccountException&gt; notRealtorsAccountExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L54">		logger.warn(&quot;Could not access an account that belongs to another client. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L55">		ctx.status(400);</span>
+<span class="nc" id="L56">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L57">	};</span>
+	
+<span class="nc" id="L59">	private ExceptionHandler&lt;RealtorNotFoundException&gt; realtorNotFoundExceptionHandler = (e, ctx) -&gt; {</span>
+<span class="nc" id="L60">		logger.warn(&quot;A user tried to retrieve a realtor, but it was not found. Exception message is \n&quot; + e.getMessage());</span>
+<span class="nc" id="L61">		ctx.status(404);</span>
+<span class="nc" id="L62">		ctx.json(new MessageDTO(e.getMessage()));</span>
+<span class="nc" id="L63">	};</span>
+	
+	@Override
+	public void mapEndpoints(Javalin app) {
+<span class="nc" id="L67">		app.exception(AccountNotFoundException.class, accountNotFoundExceptionHandler);</span>
+<span class="nc" id="L68">		app.exception(AddAccountException.class, addAccountExceptionHandler);</span>
+<span class="nc" id="L69">		app.exception(AddRealtorException.class, addRealtorExceptionHandler);</span>
+<span class="nc" id="L70">		app.exception(BadParameterException.class, badParameterExceptionHandler);</span>
+<span class="nc" id="L71">		app.exception(DatabaseException.class, databaseExceptionHandler);</span>
+<span class="nc" id="L72">		app.exception(NotRealtorsAccountException.class, notRealtorsAccountExceptionHandler);</span>
+<span class="nc" id="L73">		app.exception(RealtorNotFoundException.class, realtorNotFoundExceptionHandler);</span>
+<span class="nc" id="L74">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

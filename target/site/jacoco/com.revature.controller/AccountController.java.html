@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ProjectZeroFullStack</a> &gt; <a href="index.source.html" class="el_package">com.revature.controller</a> &gt; <span class="el_source">AccountController.java</span></div><h1>AccountController.java</h1><pre class="source lang-java linenums">package com.revature.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revature.controller.AccountController;
+import com.revature.dto.PostAccountDTO;
+import com.revature.model.Account;
+import com.revature.service.AccountService;
+
+import io.javalin.Javalin;
+import io.javalin.http.Handler;
+
+public class AccountController implements Controller {
+	
+	private AccountService accountService;
+	
+<span class="nc" id="L18">	String constantRealtorId = &quot;realtorid&quot;;</span>
+<span class="nc" id="L19">	String constantAccountId = &quot;accountid&quot;;</span>
+<span class="nc" id="L20">	String accountIdUrl = &quot;/realtors/:realtorid/accounts/:accountid&quot;;</span>
+<span class="nc" id="L21">	String accountUrl = &quot;/realtors/:realtorid/accounts&quot;;</span>
+	
+<span class="nc" id="L23">	public AccountController() {</span>
+<span class="nc" id="L24">		this.accountService = new AccountService();</span>
+<span class="nc" id="L25">	}</span>
+
+<span class="nc" id="L27">	private Handler addAccount = ctx -&gt; {</span>
+<span class="nc" id="L28">		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);</span>
+<span class="nc" id="L29">		String realtorId = ctx.pathParam(constantRealtorId);</span>
+
+<span class="nc" id="L31">		Account insertedAccount = this.accountService.addAccount(realtorId, accountDTO);</span>
+
+<span class="nc" id="L33">		ctx.status(201);</span>
+<span class="nc" id="L34">		ctx.json(insertedAccount);</span>
+<span class="nc" id="L35">	};</span>
+	
+<span class="nc" id="L37">	private Handler getAccounts = ctx -&gt; {</span>
+<span class="nc" id="L38">		String realtorId = ctx.pathParam(constantRealtorId);</span>
+<span class="nc" id="L39">		String aLT = ctx.queryParam(&quot;amountLessThan&quot;);</span>
+<span class="nc" id="L40">		String aGT = ctx.queryParam(&quot;amountGreaterThan&quot;);</span>
+		
+<span class="nc" id="L42">		List&lt;Account&gt; accountList = new ArrayList&lt;&gt;();</span>
+		
+<span class="nc bnc" id="L44" title="All 4 branches missed.">		if (aLT == null &amp;&amp; aGT == null) {</span>
+<span class="nc" id="L45">			accountList = this.accountService.getAccounts(realtorId);</span>
+<span class="nc" id="L46">		} else {</span>
+<span class="nc" id="L47">			accountList = this.accountService.getAccountsSpecial(realtorId, aLT, aGT);</span>
+		}
+		
+<span class="nc" id="L50">		ctx.json(accountList);</span>
+<span class="nc" id="L51">		ctx.status(200);</span>
+<span class="nc" id="L52">	};</span>
+	
+<span class="nc" id="L54">	private Handler getAccountById = ctx -&gt; {</span>
+<span class="nc" id="L55">		String id1 = ctx.pathParam(constantRealtorId);</span>
+<span class="nc" id="L56">		String id2 = ctx.pathParam(constantAccountId);</span>
+		
+<span class="nc" id="L58">		Account account = accountService.getAccountById(id1, id2);</span>
+		
+<span class="nc" id="L60">		ctx.json(account);</span>
+<span class="nc" id="L61">		ctx.status(200);</span>
+<span class="nc" id="L62">	};</span>
+	
+<span class="nc" id="L64">	private Handler updateAccount = ctx -&gt; {</span>
+<span class="nc" id="L65">		String id1 = ctx.pathParam(constantRealtorId);</span>
+<span class="nc" id="L66">		String id2 = ctx.pathParam(constantAccountId);</span>
+<span class="nc" id="L67">		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);</span>
+		
+<span class="nc" id="L69">		Account account = this.accountService.updateAccount(id1, id2, accountDTO);</span>
+		
+<span class="nc" id="L71">		ctx.json(account);</span>
+<span class="nc" id="L72">		ctx.status(200);</span>
+<span class="nc" id="L73">	};</span>
+	
+<span class="nc" id="L75">	private Handler deleteAccount = ctx -&gt; {</span>
+<span class="nc" id="L76">		String id1 = ctx.pathParam(constantRealtorId);</span>
+<span class="nc" id="L77">		String id2 = ctx.pathParam(constantAccountId);</span>
+		
+<span class="nc" id="L79">		this.accountService.deleteAccount(id1, id2);</span>
+		
+<span class="nc" id="L81">		ctx.status(200);</span>
+<span class="nc" id="L82">	};</span>
+	
+	@Override
+	public void mapEndpoints(Javalin app) {
+<span class="nc" id="L86">		app.post(accountUrl, addAccount);</span>
+<span class="nc" id="L87">		app.get(accountUrl, getAccounts);</span>
+<span class="nc" id="L88">		app.get(accountIdUrl, getAccountById);</span>
+<span class="nc" id="L89">		app.put(accountIdUrl, updateAccount);</span>
+<span class="nc" id="L90">		app.delete(accountIdUrl, deleteAccount);</span>
+<span class="nc" id="L91">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

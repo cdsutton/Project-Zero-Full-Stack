@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Account.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ProjectZeroFullStack</a> &gt; <a href="index.source.html" class="el_package">com.revature.model</a> &gt; <span class="el_source">Account.java</span></div><h1>Account.java</h1><pre class="source lang-java linenums">package com.revature.model;
+
+public class Account {
+	
+	private int id;
+	private String accountType;
+	private double amount;
+	
+	public Account() {
+<span class="nc" id="L10">		super();</span>
+<span class="nc" id="L11">	}</span>
+	
+	public Account(int id, String accountType, double amount) {
+<span class="nc" id="L14">		super();</span>
+<span class="nc" id="L15">		this.id = id;</span>
+<span class="nc" id="L16">		this.accountType = accountType;</span>
+<span class="nc" id="L17">		this.amount = amount;</span>
+<span class="nc" id="L18">	}</span>
+
+	public int getId() {
+<span class="nc" id="L21">		return id;</span>
+	}
+
+	public void setId(int id) {
+<span class="nc" id="L25">		this.id = id;</span>
+<span class="nc" id="L26">	}</span>
+
+	public String getAccountType() {
+<span class="nc" id="L29">		return accountType;</span>
+	}
+
+	public void setAccountType(String accountType) {
+<span class="nc" id="L33">		this.accountType = accountType;</span>
+<span class="nc" id="L34">	}</span>
+
+	public double getAmount() {
+<span class="nc" id="L37">		return amount;</span>
+	}
+
+	public void setAmount(double amount) {
+<span class="nc" id="L41">		this.amount = amount;</span>
+<span class="nc" id="L42">	}</span>
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L46">		final int prime = 31;</span>
+<span class="nc" id="L47">		int result = 1;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());</span>
+		long temp;
+<span class="nc" id="L50">		temp = Double.doubleToLongBits(amount);</span>
+<span class="nc" id="L51">		result = prime * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</span>
+<span class="nc" id="L52">		result = prime * result + id;</span>
+<span class="nc" id="L53">		return result;</span>
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L59">			return true;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L61">			return false;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L63">			return false;</span>
+<span class="nc" id="L64">		Account other = (Account) obj;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		if (accountType == null) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">			if (other.accountType != null)</span>
+<span class="nc" id="L67">				return false;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		} else if (!accountType.equals(other.accountType))</span>
+<span class="nc" id="L69">			return false;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))</span>
+<span class="nc" id="L71">			return false;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (id != other.id)</span>
+<span class="nc" id="L73">			return false;</span>
+<span class="nc" id="L74">		return true;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L79">		return &quot;Account [id=&quot; + id + &quot;, accountType=&quot; + accountType + &quot;, amount=&quot; + amount + &quot;]&quot;;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

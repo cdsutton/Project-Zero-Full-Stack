@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealtorRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ProjectZeroFullStack</a> &gt; <a href="index.source.html" class="el_package">com.revature.dao</a> &gt; <span class="el_source">RealtorRepository.java</span></div><h1>RealtorRepository.java</h1><pre class="source lang-java linenums">package com.revature.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revature.util.ConnectionUtil;
+import com.revature.dto.PostRealtorDTO;
+import com.revature.exceptions.DatabaseException;
+import com.revature.exceptions.RealtorNotFoundException;
+import com.revature.model.Realtor;
+
+<span class="nc" id="L17">public class RealtorRepository {</span>
+	
+<span class="nc" id="L19">	String exceptionMessage = &quot;Exception message: &quot;;</span>
+<span class="nc" id="L20">	String firstNameString = &quot;first_name&quot;;</span>
+<span class="nc" id="L21">	String lastNameString = &quot;last_name&quot;;</span>
+<span class="nc" id="L22">	String somethingWentWrongWhenTryingToGetAConnection = &quot;Something went wrong when trying to get a connection. &quot;;</span>
+	
+	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException {
+<span class="nc" id="L25">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L26">			String sql = &quot;INSERT INTO realtors (first_name, last_name) VALUES (?, ?)&quot;;</span>
+			
+<span class="nc" id="L28">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+			
+<span class="nc" id="L30">			pstmt.setString(1, realtorDTO.getFirstName());</span>
+<span class="nc" id="L31">			pstmt.setString(2, realtorDTO.getLastName());</span>
+			
+<span class="nc" id="L33">			int recordsAdded = pstmt.executeUpdate();</span>
+			
+<span class="nc bnc" id="L35" title="All 2 branches missed.">			if (recordsAdded != 1) {</span>
+<span class="nc" id="L36">				throw new DatabaseException(&quot;Couldn't add a realtor to the database&quot;);</span>
+			}
+			
+<span class="nc" id="L39">			ResultSet rs = pstmt.getGeneratedKeys();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">			if (rs.next()) {</span>
+<span class="nc" id="L41">				int id = rs.getInt(1);</span>
+<span class="nc" id="L42">				Realtor newRealtor = new Realtor(id, realtorDTO.getFirstName(), realtorDTO.getLastName());</span>
+<span class="nc" id="L43">				newRealtor.setAccounts(new ArrayList&lt;&gt;());</span>
+<span class="nc" id="L44">				return newRealtor;</span>
+			} else {
+<span class="nc" id="L46">				throw new DatabaseException(&quot;Realtor id was not generated, and therefore adding a realtor failed&quot;);</span>
+			}
+			
+<span class="nc" id="L49">		} catch (SQLException e) {</span>
+<span class="nc" id="L50">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L51">					+ exceptionMessage + e.getMessage());</span>
+		}
+	}
+
+	public Realtor getRealtorByName(String firstName, String lastName) throws DatabaseException {
+<span class="nc" id="L56">		Realtor realtor = null;</span>
+<span class="nc" id="L57">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L58">			String sql = &quot;SELECT * FROM realtors r WHERE r.first_name = ? AND r.last_name = ?&quot;;</span>
+			
+<span class="nc" id="L60">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+			
+<span class="nc" id="L62">			pstmt.setString(1, firstName);</span>
+<span class="nc" id="L63">			pstmt.setString(2, lastName);</span>
+			
+<span class="nc" id="L65">			ResultSet rs = pstmt.executeQuery();</span>
+			
+<span class="nc bnc" id="L67" title="All 2 branches missed.">			if(rs.next()) {</span>
+<span class="nc" id="L68">				int id = rs.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L69">				String retrievedFirstName = rs.getString(firstNameString);</span>
+<span class="nc" id="L70">				String retrievedLastName = rs.getString(lastNameString);</span>
+<span class="nc" id="L71">				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);</span>
+			}
+			
+<span class="nc" id="L74">			return realtor;</span>
+			
+<span class="nc" id="L76">		} catch (SQLException e) {</span>
+<span class="nc" id="L77">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L78">					+ exceptionMessage + e.getMessage());</span>
+		}
+	}
+	
+	public List&lt;Realtor&gt; getRealtors() throws DatabaseException {
+<span class="nc" id="L83">		Realtor realtor = null;</span>
+<span class="nc" id="L84">		List&lt;Realtor&gt; realtors = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L85">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L86">			String sql = &quot;SELECT * FROM realtors&quot;;</span>
+			
+<span class="nc" id="L88">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+			
+<span class="nc" id="L90">			ResultSet rs = pstmt.executeQuery();</span>
+			
+<span class="nc bnc" id="L92" title="All 2 branches missed.">			while(rs.next()) {</span>
+<span class="nc" id="L93">				int id = rs.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L94">				String retrievedFirstName = rs.getString(firstNameString);</span>
+<span class="nc" id="L95">				String retrievedLastName = rs.getString(lastNameString);</span>
+<span class="nc" id="L96">				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);</span>
+				
+<span class="nc" id="L98">				realtors.add(realtor);</span>
+			}
+			
+<span class="nc" id="L101">			return realtors;</span>
+			
+<span class="nc" id="L103">		} catch (SQLException e) {</span>
+<span class="nc" id="L104">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L105">					+ exceptionMessage + e.getMessage());</span>
+		}
+	}
+	
+	public Realtor getRealtorById(int realtorId) throws DatabaseException {
+<span class="nc" id="L110">		Realtor realtor = null;</span>
+<span class="nc" id="L111">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L112">			String sql = &quot;SELECT * FROM realtors r WHERE r.id = ?&quot;;</span>
+			
+<span class="nc" id="L114">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+			
+<span class="nc" id="L116">			pstmt.setInt(1, realtorId);</span>
+			
+<span class="nc" id="L118">			ResultSet rs = pstmt.executeQuery();</span>
+			
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			if(rs.next()) {</span>
+<span class="nc" id="L121">				int id = rs.getInt(&quot;id&quot;);</span>
+<span class="nc" id="L122">				String retrievedFirstName = rs.getString(firstNameString);</span>
+<span class="nc" id="L123">				String retrievedLastName = rs.getString(lastNameString);</span>
+<span class="nc" id="L124">				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);</span>
+			}
+			
+<span class="nc" id="L127">			return realtor;</span>
+			
+<span class="nc" id="L129">		} catch (SQLException e) {</span>
+<span class="nc" id="L130">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L131">					+ exceptionMessage + e.getMessage());</span>
+		}
+	}
+	
+	public Realtor updateRealtor(int realtorId, PostRealtorDTO realtorDTO) throws DatabaseException, RealtorNotFoundException {
+<span class="nc" id="L136">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L137">			String sql = &quot;UPDATE realtors r SET first_name = ?, last_name = ? WHERE r.id = ?&quot;;</span>
+			
+<span class="nc" id="L139">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+			
+<span class="nc" id="L141">			pstmt.setString(1, realtorDTO.getFirstName());</span>
+<span class="nc" id="L142">			pstmt.setString(2, realtorDTO.getLastName());</span>
+<span class="nc" id="L143">			pstmt.setInt(3, realtorId);</span>
+			
+<span class="nc" id="L145">			int recordsUpdated = pstmt.executeUpdate();</span>
+			
+<span class="nc bnc" id="L147" title="All 2 branches missed.">			if (recordsUpdated != 1) {</span>
+<span class="nc" id="L148">				throw new RealtorNotFoundException(&quot;Couldn't find that realtor in the database&quot;);</span>
+			}
+			
+<span class="nc" id="L151">			return new Realtor(realtorId, realtorDTO.getFirstName(), realtorDTO.getLastName());</span>
+			
+<span class="nc" id="L153">		} catch (SQLException e) {</span>
+<span class="nc" id="L154">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L155">					+ exceptionMessage + e.getMessage());</span>
+		}
+	}
+	
+	public void deleteRealtor(int realtorId) throws DatabaseException, RealtorNotFoundException {
+<span class="nc" id="L160">		try (Connection connection = ConnectionUtil.getConnection()) {</span>
+<span class="nc" id="L161">			String sql = &quot;DELETE FROM realtors WHERE id = ?&quot;;</span>
+			
+<span class="nc" id="L163">			PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+
+<span class="nc" id="L165">			pstmt.setInt(1, realtorId);</span>
+			
+<span class="nc" id="L167">			int recordsDeleted = pstmt.executeUpdate();</span>
+			
+<span class="nc bnc" id="L169" title="All 2 branches missed.">			if (recordsDeleted != 1) {</span>
+<span class="nc" id="L170">				throw new RealtorNotFoundException(&quot;Couldn't find that realtor in the database&quot;);</span>
+			}
+			
+<span class="nc" id="L173">		} catch (SQLException e) {</span>
+<span class="nc" id="L174">			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection</span>
+<span class="nc" id="L175">					+ exceptionMessage + e.getMessage());</span>
+		}
+<span class="nc" id="L177">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RealtorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ProjectZeroFullStack</a> &gt; <a href="index.source.html" class="el_package">com.revature.controller</a> &gt; <span class="el_source">RealtorController.java</span></div><h1>RealtorController.java</h1><pre class="source lang-java linenums">package com.revature.controller;
+
+import java.util.List;
+
+import com.revature.dto.PostRealtorDTO;
+import com.revature.model.Realtor;
+import com.revature.service.RealtorService;
+
+import io.javalin.Javalin;
+import io.javalin.http.Handler;
+
+public class RealtorController implements Controller {
+	
+	private RealtorService realtorService;
+	
+<span class="nc" id="L16">	String constantRealtorId = &quot;realtorid&quot;;</span>
+<span class="nc" id="L17">	String realtorUrl = &quot;/realtors&quot;;</span>
+<span class="nc" id="L18">	String realtorIdUrl = &quot;/realtors/:realtorid&quot;;</span>
+	
+<span class="nc" id="L20">	public RealtorController() {</span>
+<span class="nc" id="L21">		this.realtorService = new RealtorService();</span>
+<span class="nc" id="L22">	}</span>
+	
+<span class="nc" id="L24">	private Handler addRealtor = ctx -&gt; {</span>
+<span class="nc" id="L25">		PostRealtorDTO realtorDTO = ctx.bodyAsClass(PostRealtorDTO.class);</span>
+		
+<span class="nc" id="L27">		Realtor realtor = this.realtorService.addRealtor(realtorDTO);</span>
+		
+<span class="nc" id="L29">		ctx.json(realtor);</span>
+<span class="nc" id="L30">		ctx.status(201);</span>
+<span class="nc" id="L31">	};</span>
+	
+<span class="nc" id="L33">	private Handler getRealtors = ctx -&gt; {</span>
+<span class="nc" id="L34">		List&lt;Realtor&gt; realtor = this.realtorService.getRealtors();</span>
+		
+<span class="nc" id="L36">		ctx.json(realtor);</span>
+<span class="nc" id="L37">		ctx.status(200);</span>
+<span class="nc" id="L38">	};</span>
+	
+<span class="nc" id="L40">	private Handler getRealtorById = ctx -&gt; {</span>
+<span class="nc" id="L41">		String realtorId = ctx.pathParam(constantRealtorId);</span>
+		
+<span class="nc" id="L43">		Realtor realtor = this.realtorService.getRealtorById(realtorId);</span>
+		
+<span class="nc" id="L45">		ctx.json(realtor);</span>
+<span class="nc" id="L46">		ctx.status(200);</span>
+<span class="nc" id="L47">	};</span>
+	
+<span class="nc" id="L49">	private Handler updateRealtor = ctx -&gt; {</span>
+<span class="nc" id="L50">		String realtorId = ctx.pathParam(constantRealtorId);</span>
+<span class="nc" id="L51">		PostRealtorDTO realtorDTO = ctx.bodyAsClass(PostRealtorDTO.class);</span>
+		
+<span class="nc" id="L53">		Realtor realtor = this.realtorService.updateRealtor(realtorId, realtorDTO);</span>
+		
+<span class="nc" id="L55">		ctx.json(realtor);</span>
+<span class="nc" id="L56">		ctx.status(200);</span>
+<span class="nc" id="L57">	};</span>
+	
+<span class="nc" id="L59">	private Handler deleteRealtor = ctx -&gt; {</span>
+<span class="nc" id="L60">		String realtorId = ctx.pathParam(constantRealtorId);</span>
+		
+<span class="nc" id="L62">		this.realtorService.deleteRealtor(realtorId);</span>
+		
+<span class="nc" id="L64">		ctx.status(200);</span>
+<span class="nc" id="L65">	};</span>
+	
+	@Override
+	public void mapEndpoints(Javalin app) {
+<span class="nc" id="L69">		app.post(realtorUrl, addRealtor);</span>
+<span class="nc" id="L70">		app.get(realtorUrl, getRealtors);</span>
+<span class="nc" id="L71">		app.get(realtorIdUrl, getRealtorById);</span>
+<span class="nc" id="L72">		app.put(realtorIdUrl, updateRealtor);</span>
+<span class="nc" id="L73">		app.delete(realtorIdUrl, deleteRealtor);</span>
+<span class="nc" id="L74">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
