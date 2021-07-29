@@ -10,15 +10,18 @@ import java.util.List;
 
 import com.revature.util.ConnectionUtil;
 import com.revature.dto.PostRealtorDTO;
-import com.revature.exceptions.AddRealtorException;
-import com.revature.exceptions.BadParameterException;
 import com.revature.exceptions.DatabaseException;
 import com.revature.exceptions.RealtorNotFoundException;
 import com.revature.model.Realtor;
 
 public class RealtorRepository {
 	
-	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException, AddRealtorException {
+	String exceptionMessage = "Exception message: ";
+	String firstNameString = "first_name";
+	String lastNameString = "last_name";
+	String somethingWentWrongWhenTryingToGetAConnection = "Something went wrong when trying to get a connection. ";
+	
+	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 			String sql = "INSERT INTO realtors (first_name, last_name) VALUES (?, ?)";
 			
@@ -44,8 +47,8 @@ public class RealtorRepository {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 
@@ -63,16 +66,16 @@ public class RealtorRepository {
 			
 			if(rs.next()) {
 				int id = rs.getInt("id");
-				String retrievedFirstName = rs.getString("first_name");
-				String retrievedLastName = rs.getString("last_name");
+				String retrievedFirstName = rs.getString(firstNameString);
+				String retrievedLastName = rs.getString(lastNameString);
 				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 			}
 			
 			return realtor;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 	
@@ -88,8 +91,8 @@ public class RealtorRepository {
 			
 			while(rs.next()) {
 				int id = rs.getInt("id");
-				String retrievedFirstName = rs.getString("first_name");
-				String retrievedLastName = rs.getString("last_name");
+				String retrievedFirstName = rs.getString(firstNameString);
+				String retrievedLastName = rs.getString(lastNameString);
 				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 				
 				realtors.add(realtor);
@@ -98,8 +101,8 @@ public class RealtorRepository {
 			return realtors;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 	
@@ -116,20 +119,20 @@ public class RealtorRepository {
 			
 			if(rs.next()) {
 				int id = rs.getInt("id");
-				String retrievedFirstName = rs.getString("first_name");
-				String retrievedLastName = rs.getString("last_name");
+				String retrievedFirstName = rs.getString(firstNameString);
+				String retrievedLastName = rs.getString(lastNameString);
 				realtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 			}
 			
 			return realtor;
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 	
-	public Realtor updateRealtor(int realtorId, PostRealtorDTO realtorDTO) throws BadParameterException, DatabaseException, RealtorNotFoundException {
+	public Realtor updateRealtor(int realtorId, PostRealtorDTO realtorDTO) throws DatabaseException, RealtorNotFoundException {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 			String sql = "UPDATE realtors r SET first_name = ?, last_name = ? WHERE r.id = ?";
 			
@@ -145,16 +148,15 @@ public class RealtorRepository {
 				throw new RealtorNotFoundException("Couldn't find that realtor in the database");
 			}
 			
-				Realtor newRealtor = new Realtor(realtorId, realtorDTO.getFirstName(), realtorDTO.getLastName());
-				return newRealtor;
+			return new Realtor(realtorId, realtorDTO.getFirstName(), realtorDTO.getLastName());
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 	
-	public void deleteRealtor(int realtorId) throws BadParameterException, DatabaseException, RealtorNotFoundException {
+	public void deleteRealtor(int realtorId) throws DatabaseException, RealtorNotFoundException {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 			String sql = "DELETE FROM realtors WHERE id = ?";
 			
@@ -169,8 +171,8 @@ public class RealtorRepository {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException("Something went wrong when trying to get a connection. "
-					+ "Exception message: " + e.getMessage());
+			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
+					+ exceptionMessage + e.getMessage());
 		}
 	}
 	

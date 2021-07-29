@@ -36,7 +36,6 @@ public class RealtorServiceTest {
 		
 		when(mockRealtorRepository.addRealtor(new PostRealtorDTO("Joe", "Shimamura")))
 		.thenReturn(new Realtor(1, "Joe", "Shimamura"));
-		
 	}
 	
 	@Before
@@ -44,8 +43,10 @@ public class RealtorServiceTest {
 		realtorService = new RealtorService(mockRealtorRepository);
 	}
 	
+	/* Testing addRealtor Service */
+	
 	@Test
-	public void test_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
+	public void addRealtor_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
 
 		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
 			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
@@ -194,5 +195,73 @@ public class RealtorServiceTest {
 		}
 		
 	}
-
+	
+	/* Testing getRealtors Service */
+	
+//	@Test
+//	public void getRealtors_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
+//
+////		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
+////			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
+////			
+////			Realtor actual = realtorService.addRealtor(new PostRealtorDTO("Joe", "Shimamura"));
+////			
+////			Realtor expected = new Realtor(1, "Joe", "Shimamura");
+////			
+////			assertEquals(expected, actual);
+////		}
+//		
+//	}
+//	
+//	/* Testing getRealtorById Service */
+//	
+//	@Test
+//	public void getRealtorById_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
+//
+////		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
+////			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
+////			
+////			Realtor actual = realtorService.addRealtor(new PostRealtorDTO("Joe", "Shimamura"));
+////			
+////			Realtor expected = new Realtor(1, "Joe", "Shimamura");
+////			
+////			assertEquals(expected, actual);
+////		}
+//		
+//	}
+//	
+//	/* Testing updateRealtor Service */
+//	
+//	@Test
+//	public void updateRealtor_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
+//
+////		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
+////			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
+////			
+////			Realtor actual = realtorService.addRealtor(new PostRealtorDTO("Joe", "Shimamura"));
+////			
+////			Realtor expected = new Realtor(1, "Joe", "Shimamura");
+////			
+////			assertEquals(expected, actual);
+////		}
+//		
+//	}
+//	
+//	/* Testing deleteRealtor Service */
+//	
+//	@Test
+//	public void deleteRealtor_happyPath() throws BadParameterException, DatabaseException, AddRealtorException {
+//
+////		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
+////			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
+////			
+////			Realtor actual = realtorService.addRealtor(new PostRealtorDTO("Joe", "Shimamura"));
+////			
+////			Realtor expected = new Realtor(1, "Joe", "Shimamura");
+////			
+////			assertEquals(expected, actual);
+////		}
+//		
+//	}
+	
 }

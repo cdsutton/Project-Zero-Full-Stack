@@ -3,16 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.revature</groupId>
-	<artifactId>ProjectZeroFullStack</artifactId>
+	<artifactId>ProjectZeroFullStackOriginal</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
 
-		<sonar.projectKey>cdsutton_Project-Zero-Full-Stack</sonar.projectKey>
-		<sonar.organization>cdsutton</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+  		<sonar.projectKey>cdsutton_Project-Zero-Full-Stack</sonar.projectKey>
+  		<sonar.organization>cdsutton</sonar.organization>
+ 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<build>

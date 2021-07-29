@@ -3,9 +3,6 @@ package com.revature.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.revature.controller.AccountController;
 import com.revature.dto.PostAccountDTO;
 import com.revature.model.Account;
@@ -16,16 +13,20 @@ import io.javalin.http.Handler;
 
 public class AccountController implements Controller {
 	
-	private Logger logger = LoggerFactory.getLogger(AccountController.class);
 	private AccountService accountService;
-
+	
+	String constantRealtorId = "realtorid";
+	String constantAccountId = "accountid";
+	String accountIdUrl = "/realtors/:realtorid/accounts/:accountid";
+	String accountUrl = "/realtors/:realtorid/accounts";
+	
 	public AccountController() {
 		this.accountService = new AccountService();
 	}
 
 	private Handler addAccount = ctx -> {
 		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);
-		String realtorId = ctx.pathParam("realtorid");
+		String realtorId = ctx.pathParam(constantRealtorId);
 
 		Account insertedAccount = this.accountService.addAccount(realtorId, accountDTO);
 
@@ -34,16 +35,16 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler getAccounts = ctx -> {
-		String id = ctx.pathParam("realtorid");
+		String realtorId = ctx.pathParam(constantRealtorId);
 		String aLT = ctx.queryParam("amountLessThan");
 		String aGT = ctx.queryParam("amountGreaterThan");
 		
 		List<Account> accountList = new ArrayList<>();
 		
 		if (aLT == null && aGT == null) {
-			accountList = this.accountService.getAccounts(id);
+			accountList = this.accountService.getAccounts(realtorId);
 		} else {
-			accountList = this.accountService.getAccountsSpecial(id, aLT, aGT);
+			accountList = this.accountService.getAccountsSpecial(realtorId, aLT, aGT);
 		}
 		
 		ctx.json(accountList);
@@ -51,8 +52,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler getAccountById = ctx -> {
-		String id1 = ctx.pathParam("realtorid");
-		String id2 = ctx.pathParam("accountid");
+		String id1 = ctx.pathParam(constantRealtorId);
+		String id2 = ctx.pathParam(constantAccountId);
 		
 		Account account = accountService.getAccountById(id1, id2);
 		
@@ -61,8 +62,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler updateAccount = ctx -> {
-		String id1 = ctx.pathParam("realtorid");
-		String id2 = ctx.pathParam("accountid");
+		String id1 = ctx.pathParam(constantRealtorId);
+		String id2 = ctx.pathParam(constantAccountId);
 		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);
 		
 		Account account = this.accountService.updateAccount(id1, id2, accountDTO);
@@ -72,8 +73,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler deleteAccount = ctx -> {
-		String id1 = ctx.pathParam("realtorid");
-		String id2 = ctx.pathParam("accountid");
+		String id1 = ctx.pathParam(constantRealtorId);
+		String id2 = ctx.pathParam(constantAccountId);
 		
 		this.accountService.deleteAccount(id1, id2);
 		
@@ -82,11 +83,11 @@ public class AccountController implements Controller {
 	
 	@Override
 	public void mapEndpoints(Javalin app) {
-		app.post("/realtors/:realtorid/accounts", addAccount);
-		app.get("/realtors/:realtorid/accounts", getAccounts);
-		app.get("/realtors/:realtorid/accounts/:accountid", getAccountById);
-		app.put("/realtors/:realtorid/accounts/:accountid", updateAccount);
-		app.delete("/realtors/:realtorid/accounts/:accountid", deleteAccount);
+		app.post(accountUrl, addAccount);
+		app.get(accountUrl, getAccounts);
+		app.get(accountIdUrl, getAccountById);
+		app.put(accountIdUrl, updateAccount);
+		app.delete(accountIdUrl, deleteAccount);
 	}
 	
 }

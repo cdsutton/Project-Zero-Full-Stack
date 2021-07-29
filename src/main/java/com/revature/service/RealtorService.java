@@ -12,7 +12,11 @@ import com.revature.model.Realtor;
 
 public class RealtorService {
 	
-private RealtorRepository realtorRepository;
+	private RealtorRepository realtorRepository;
+	
+	String realtorIdMustBeAnIntUserProvided = "Realtor id must be an int. User provided ";
+	String realtorWithIdOf = "Realtor with id of ";
+	String wasNotFound = " was not found.";
 	
 	public RealtorService() {
 		super();
@@ -52,12 +56,12 @@ private RealtorRepository realtorRepository;
 			Realtor realtor = realtorRepository.getRealtorById(id);
 			
 			if (realtor == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
 			}
 			
 			return realtor;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	
 	}
@@ -69,12 +73,12 @@ private RealtorRepository realtorRepository;
 			Realtor realtor = realtorRepository.updateRealtor(id, realtorDTO);
 			
 			if (realtor == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
 			}
 			
 			return realtor;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	
 	}
@@ -86,11 +90,11 @@ private RealtorRepository realtorRepository;
 			realtorRepository.deleteRealtor(id);
 			
 			if (stringId == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
 			}
 
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	
 	}

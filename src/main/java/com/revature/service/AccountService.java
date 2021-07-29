@@ -17,7 +17,14 @@ import com.revature.model.Account;
 
 public class AccountService {
 	
-private AccountRepository accountRepository;
+	private AccountRepository accountRepository;
+	
+	String accountWithIdOf = "Account with Id of ";
+	String and = " and ";
+	String realtorIdMustBeAnIntUserProvided = "Realtor Id must be an int. User provided ";
+	String realtorIdAndAccountIdMustBeAnIntUserProvided = "Realtor Id and Account Id must be an int. User provided ";
+	String realtorWithIdOf = "Realtor with Id of ";
+	String wasNotFound = " was not found.";
 	
 	public AccountService() {
 		this.accountRepository = new AccountRepository();
@@ -45,7 +52,7 @@ private AccountRepository accountRepository;
 				connection.commit();
 				return account;
 			} catch (NumberFormatException e) {
-				throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+				throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 			}
 			
 		} catch (SQLException e) {
@@ -62,7 +69,7 @@ private AccountRepository accountRepository;
 			List<Account> accounts = accountRepository.getAccounts(id);	
 			
 			if (stringId == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
 			}
 			
 			if (accounts == null) {
@@ -71,7 +78,7 @@ private AccountRepository accountRepository;
 			
 			return accountRepository.getAccounts(id);
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	}
 	
@@ -84,7 +91,7 @@ private AccountRepository accountRepository;
 			List<Account> accounts = accountRepository.getAccountsSpecial(id, lessThan, greaterThan);	
 			
 			if (stringId == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
 			}
 			
 			if (accounts == null) {
@@ -94,7 +101,7 @@ private AccountRepository accountRepository;
 			return accounts;
 			
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id must be an int. User provided " + stringId);
+			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	}
 	
@@ -106,16 +113,16 @@ private AccountRepository accountRepository;
 			Account account = accountRepository.getAccountById(id1, id2);
 			
 			if (stringId1 == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id1 + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id1 + wasNotFound);
 			}
 			
 			if (account == null) {
-				throw new AccountNotFoundException("Account with id of " + id2 + " was not found");
+				throw new AccountNotFoundException(accountWithIdOf + id2 + wasNotFound);
 			}
 			
 			return account;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id and Account id must be an int. User provided " + stringId1 + " and " + stringId2);
+			throw new BadParameterException(realtorIdAndAccountIdMustBeAnIntUserProvided + stringId1 + and + stringId2);
 		}
 	
 	}
@@ -128,16 +135,16 @@ private AccountRepository accountRepository;
 			Account account = accountRepository.updateAccount(id1, id2, accountDTO);
 			
 			if (stringId1 == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id1 + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id1 + wasNotFound);
 			}
 			
 			if (stringId2 == null) {
-				throw new AccountNotFoundException("Account with id of " + id2 + " was not found");
+				throw new AccountNotFoundException(accountWithIdOf + id2 + wasNotFound);
 			}
 			
 			return account;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id and Account id must be an int. User provided " + stringId1 + " and " + stringId2);
+			throw new BadParameterException(realtorIdAndAccountIdMustBeAnIntUserProvided + stringId1 + and + stringId2);
 		}
 	
 	}
@@ -150,15 +157,15 @@ private AccountRepository accountRepository;
 			accountRepository.deleteAccount(id1, id2);
 			
 			if (stringId1 == null) {
-				throw new RealtorNotFoundException("Realtor with id of " + id1 + " was not found");
+				throw new RealtorNotFoundException(realtorWithIdOf + id1 + wasNotFound);
 			}
 			
 			if (stringId2 == null) {
-				throw new AccountNotFoundException("Account with id of " + id2 + " was not found");
+				throw new AccountNotFoundException(accountWithIdOf + id2 + wasNotFound);
 			}
 
 		} catch (NumberFormatException e) {
-			throw new BadParameterException("Realtor id and Account id must be an int. User provided " + stringId1 + " and " + stringId2);
+			throw new BadParameterException(realtorIdAndAccountIdMustBeAnIntUserProvided + stringId1 + and + stringId2);
 		}
 	
 	}
