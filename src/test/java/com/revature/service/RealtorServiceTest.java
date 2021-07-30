@@ -202,12 +202,12 @@ public class RealtorServiceTest {
 	/* Testing getRealtors Service */
 	
 	@Test
-	public void getRealtors_happyPath() throws BadParameterException, DatabaseException, AddRealtorException, RealtorNotFoundException {
+	public void getAllRealtors_happyPath() throws BadParameterException, DatabaseException, AddRealtorException, RealtorNotFoundException {
 
 		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
 			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
 			
-			List<Realtor> actual = realtorService.getRealtors();
+			List<Realtor> actual = realtorService.getAllRealtors();
 			
 			List<Realtor> expected = new ArrayList<Realtor>();
 			expected.add(new Realtor(1, "Joe", "Shimamura"));
@@ -219,13 +219,13 @@ public class RealtorServiceTest {
 	}
 	
 	@Test
-	public void getRealtors_null() throws BadParameterException, DatabaseException, AddRealtorException, RealtorNotFoundException {
+	public void getAllRealtors_null() throws BadParameterException, DatabaseException, AddRealtorException, RealtorNotFoundException {
 
 		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
 			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
 			
 			try {
-				realtorService.getRealtors();
+				realtorService.getAllRealtors();
 				fail("RealtorNotFoundException was not thrown.");
 			} catch (RealtorNotFoundException e) {
 				assertEquals("There are no realtors in the database.", e.getMessage());
