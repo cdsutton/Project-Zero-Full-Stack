@@ -62,11 +62,11 @@ public class AccountService {
 
 	}
 	
-	public List<Account> getAccounts(String stringId) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
+	public List<Account> getAllAccounts(String stringId) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
 		try {
 			int id = Integer.parseInt(stringId);
 			
-			List<Account> accounts = accountRepository.getAccounts(id);	
+			List<Account> accounts = accountRepository.getAllAccounts(id);	
 			
 			if (stringId == null) {
 				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
@@ -76,19 +76,19 @@ public class AccountService {
 				throw new AccountNotFoundException("There are no accounts in the database");
 			}
 			
-			return accountRepository.getAccounts(id);
+			return accountRepository.getAllAccounts(id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
 		}
 	}
 	
-	public List<Account> getAccountsSpecial(String stringId, String aLT, String aGT) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
+	public List<Account> getSelectAccounts(String stringId, String aLT, String aGT) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
 		try {
 			int id = Integer.parseInt(stringId);
 			double lessThan = Double.parseDouble(aLT);
 			double greaterThan = Double.parseDouble(aGT);
 			
-			List<Account> accounts = accountRepository.getAccountsSpecial(id, lessThan, greaterThan);	
+			List<Account> accounts = accountRepository.getSelectAccounts(id, lessThan, greaterThan);	
 			
 			if (stringId == null) {
 				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);

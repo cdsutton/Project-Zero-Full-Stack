@@ -34,7 +34,7 @@ public class AccountController implements Controller {
 		ctx.json(insertedAccount);
 	};
 	
-	private Handler getAccounts = ctx -> {
+	private Handler getAllAccounts = ctx -> {
 		String realtorId = ctx.pathParam(constantRealtorId);
 		String aLT = ctx.queryParam("amountLessThan");
 		String aGT = ctx.queryParam("amountGreaterThan");
@@ -42,9 +42,9 @@ public class AccountController implements Controller {
 		List<Account> accountList = new ArrayList<>();
 		
 		if (aLT == null && aGT == null) {
-			accountList = this.accountService.getAccounts(realtorId);
+			accountList = this.accountService.getAllAccounts(realtorId);
 		} else {
-			accountList = this.accountService.getAccountsSpecial(realtorId, aLT, aGT);
+			accountList = this.accountService.getSelectAccounts(realtorId, aLT, aGT);
 		}
 		
 		ctx.json(accountList);
@@ -84,7 +84,7 @@ public class AccountController implements Controller {
 	@Override
 	public void mapEndpoints(Javalin app) {
 		app.post(accountUrl, addAccount);
-		app.get(accountUrl, getAccounts);
+		app.get(accountUrl, getAllAccounts);
 		app.get(accountIdUrl, getAccountById);
 		app.put(accountIdUrl, updateAccount);
 		app.delete(accountIdUrl, deleteAccount);

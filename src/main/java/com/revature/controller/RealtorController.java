@@ -30,8 +30,8 @@ public class RealtorController implements Controller {
 		ctx.status(201);
 	};
 	
-	private Handler getRealtors = ctx -> {
-		List<Realtor> realtor = this.realtorService.getRealtors();
+	private Handler getAllRealtors = ctx -> {
+		List<Realtor> realtor = this.realtorService.getAllRealtors();
 		
 		ctx.json(realtor);
 		ctx.status(200);
@@ -67,7 +67,7 @@ public class RealtorController implements Controller {
 	@Override
 	public void mapEndpoints(Javalin app) {
 		app.post(realtorUrl, addRealtor);
-		app.get(realtorUrl, getRealtors);
+		app.get(realtorUrl, getAllRealtors);
 		app.get(realtorIdUrl, getRealtorById);
 		app.put(realtorIdUrl, updateRealtor);
 		app.delete(realtorIdUrl, deleteRealtor);

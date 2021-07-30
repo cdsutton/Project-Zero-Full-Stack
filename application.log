@@ -1,0 +1,13 @@
+16:25:59.738 [main] INFO  io.javalin.Javalin - 
+           __                      __ _
+          / /____ _ _   __ ____ _ / /(_)____
+     __  / // __ `/| | / // __ `// // // __ \
+    / /_/ // /_/ / | |/ // /_/ // // // / / /
+    \____/ \__,_/  |___/ \__,_//_//_//_/ /_/
+
+        https://javalin.io/documentation
+
+16:25:59.797 [main] INFO  org.eclipse.jetty.util.log - Logging initialized @1829ms to org.eclipse.jetty.util.log.Slf4jLog
+16:25:59.803 [main] INFO  io.javalin.Javalin - Starting Javalin ...
+16:26:01.698 [main] INFO  io.javalin.Javalin - Listening on http://localhost:7009/
+16:26:01.699 [main] INFO  io.javalin.Javalin - Javalin started in 1900ms \o/

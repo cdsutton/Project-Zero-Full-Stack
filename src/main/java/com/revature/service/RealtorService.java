@@ -29,24 +29,24 @@ public class RealtorService {
 	
 	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException, AddRealtorException {
 		if (realtorRepository.getRealtorByName(realtorDTO.getFirstName(), realtorDTO.getLastName()) != null) {
-			throw new AddRealtorException("User tried to add a realtor that already exists with that name");
+			throw new AddRealtorException("User tried to add a realtor that already exists with that name.");
 		}
 		
 		if (realtorDTO.getFirstName().trim().equals("") || realtorDTO.getLastName().trim().equals("")) {
-			throw new AddRealtorException("User tried to add a realtor with a blank name");
+			throw new AddRealtorException("User tried to add a realtor with a blank name.");
 		}
 		
 		return realtorRepository.addRealtor(realtorDTO);
 	}
 	
-	public List<Realtor> getRealtors() throws RealtorNotFoundException, DatabaseException {
-			List<Realtor> realtors = realtorRepository.getRealtors();
+	public List<Realtor> getAllRealtors() throws RealtorNotFoundException, DatabaseException {
+			List<Realtor> realtors = realtorRepository.getAllRealtors();
 			
 			if (realtors == null) {
-				throw new RealtorNotFoundException("There are no realtors in the database");
+				throw new RealtorNotFoundException("There are no realtors in the database.");
 			}
 			
-			return realtorRepository.getRealtors();
+			return realtorRepository.getAllRealtors();
 	}
 	
 	public Realtor getRealtorById(String stringId) throws DatabaseException, BadParameterException, RealtorNotFoundException {
