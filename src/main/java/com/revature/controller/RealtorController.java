@@ -13,9 +13,9 @@ public class RealtorController implements Controller {
 	
 	private RealtorService realtorService;
 	
-	String constantRealtorId = "realtorid";
-	String realtorUrl = "/realtors";
-	String realtorIdUrl = "/realtors/:realtorid";
+	public static final String REALTOR_ID = "realtorid";
+	public static final String REALTOR_URL = "/realtors";
+	public static final String REALTOR_ID_URL = "/realtors/:realtorid";
 	
 	public RealtorController() {
 		this.realtorService = new RealtorService();
@@ -38,7 +38,7 @@ public class RealtorController implements Controller {
 	};
 	
 	private Handler getRealtorById = ctx -> {
-		String realtorId = ctx.pathParam(constantRealtorId);
+		String realtorId = ctx.pathParam(REALTOR_ID);
 		
 		Realtor realtor = this.realtorService.getRealtorById(realtorId);
 		
@@ -47,7 +47,7 @@ public class RealtorController implements Controller {
 	};
 	
 	private Handler updateRealtor = ctx -> {
-		String realtorId = ctx.pathParam(constantRealtorId);
+		String realtorId = ctx.pathParam(REALTOR_ID);
 		PostRealtorDTO realtorDTO = ctx.bodyAsClass(PostRealtorDTO.class);
 		
 		Realtor realtor = this.realtorService.updateRealtor(realtorId, realtorDTO);
@@ -57,7 +57,7 @@ public class RealtorController implements Controller {
 	};
 	
 	private Handler deleteRealtor = ctx -> {
-		String realtorId = ctx.pathParam(constantRealtorId);
+		String realtorId = ctx.pathParam(REALTOR_ID);
 		
 		this.realtorService.deleteRealtor(realtorId);
 		
@@ -66,11 +66,11 @@ public class RealtorController implements Controller {
 	
 	@Override
 	public void mapEndpoints(Javalin app) {
-		app.post(realtorUrl, addRealtor);
-		app.get(realtorUrl, getAllRealtors);
-		app.get(realtorIdUrl, getRealtorById);
-		app.put(realtorIdUrl, updateRealtor);
-		app.delete(realtorIdUrl, deleteRealtor);
+		app.post(REALTOR_URL, addRealtor);
+		app.get(REALTOR_URL, getAllRealtors);
+		app.get(REALTOR_ID_URL, getRealtorById);
+		app.put(REALTOR_ID_URL, updateRealtor);
+		app.delete(REALTOR_ID_URL, deleteRealtor);
 	}
 	
 }

@@ -14,12 +14,11 @@ public class RealtorService {
 	
 	private RealtorRepository realtorRepository;
 	
-	String realtorIdMustBeAnIntUserProvided = "Realtor id must be an int. User provided ";
-	String realtorWithIdOf = "Realtor with id of ";
-	String wasNotFound = " was not found.";
+	public static final String BAD_PARAMETER = "Realtor id must be an int. User provided ";
+	public static final String REALTOR_ID = "Realtor with id of ";
+	public static final String NOT_FOUND = " was not found.";
 	
 	public RealtorService() {
-		super();
 		this.realtorRepository = new RealtorRepository();
 	}
 	
@@ -51,17 +50,17 @@ public class RealtorService {
 	
 	public Realtor getRealtorById(String stringId) throws DatabaseException, BadParameterException, RealtorNotFoundException {
 		try {
-			int id = Integer.parseInt(stringId);
+			int realtorId = Integer.parseInt(stringId);
 			
-			Realtor realtor = realtorRepository.getRealtorById(id);
+			Realtor realtor = realtorRepository.getRealtorById(realtorId);
 			
 			if (realtor == null) {
-				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
+				throw new RealtorNotFoundException(REALTOR_ID + realtorId + NOT_FOUND);
 			}
 			
 			return realtor;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
+			throw new BadParameterException(BAD_PARAMETER + stringId);
 		}
 	
 	}
@@ -73,12 +72,12 @@ public class RealtorService {
 			Realtor realtor = realtorRepository.updateRealtor(id, realtorDTO);
 			
 			if (realtor == null) {
-				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
+				throw new RealtorNotFoundException(REALTOR_ID + id + NOT_FOUND);
 			}
 			
 			return realtor;
 		} catch (NumberFormatException e) {
-			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
+			throw new BadParameterException(BAD_PARAMETER + stringId);
 		}
 	
 	}
@@ -90,11 +89,11 @@ public class RealtorService {
 			realtorRepository.deleteRealtor(id);
 			
 			if (stringId == null) {
-				throw new RealtorNotFoundException(realtorWithIdOf + id + wasNotFound);
+				throw new RealtorNotFoundException(REALTOR_ID + id + NOT_FOUND);
 			}
 
 		} catch (NumberFormatException e) {
-			throw new BadParameterException(realtorIdMustBeAnIntUserProvided + stringId);
+			throw new BadParameterException(BAD_PARAMETER + stringId);
 		}
 	
 	}

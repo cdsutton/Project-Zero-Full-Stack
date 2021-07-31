@@ -14,7 +14,7 @@ import io.javalin.Javalin;
 public class Application {
 
 	private static Javalin app;
-	private static Logger logger = LoggerFactory.getLogger(Application.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) {
 
@@ -23,7 +23,7 @@ public class Application {
 		app.before(ctx -> {
 			String uri = ctx.req.getRequestURI();
 			String httpMethod = ctx.req.getMethod();
-			logger.info(httpMethod + " request to endpoint " + uri + " received");
+			LOGGER.info("{} request to endpoint {} received.", httpMethod, uri);
 		});
 
 		mapControllers(new AccountController(), new ExceptionController(), new RealtorController(),

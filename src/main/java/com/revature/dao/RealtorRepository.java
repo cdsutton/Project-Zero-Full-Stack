@@ -16,10 +16,10 @@ import com.revature.model.Realtor;
 
 public class RealtorRepository {
 	
-	String exceptionMessage = "Exception message: ";
-	String firstNameString = "first_name";
-	String lastNameString = "last_name";
-	String somethingWentWrongWhenTryingToGetAConnection = "Something went wrong when trying to get a connection. ";
+	public static final String EXCEPTION_MESSAGE = "Exception message: ";
+	public static final String FIRST_NAME = "first_name";
+	public static final String LAST_NAME = "last_name";
+	public static final String DATABASE_EXCEPTION = "Something went wrong when trying to get a connection. ";
 	
 	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException {
 		
@@ -48,8 +48,7 @@ public class RealtorRepository {
 			}
 			
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return newRealtor;
@@ -68,15 +67,14 @@ public class RealtorRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while(rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedFirstName = rs.getString(firstNameString);
-					String retrievedLastName = rs.getString(lastNameString);
+					String retrievedFirstName = rs.getString(FIRST_NAME);
+					String retrievedLastName = rs.getString(LAST_NAME);
 					retrievedRealtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 					allRealtors.add(retrievedRealtor);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return allRealtors;
@@ -95,14 +93,13 @@ public class RealtorRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {	
 				if (rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedFirstName = rs.getString(firstNameString);
-					String retrievedLastName = rs.getString(lastNameString);
+					String retrievedFirstName = rs.getString(FIRST_NAME);
+					String retrievedLastName = rs.getString(LAST_NAME);
 					retrievedRealtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return retrievedRealtor;
@@ -122,14 +119,13 @@ public class RealtorRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedFirstName = rs.getString(firstNameString);
-					String retrievedLastName = rs.getString(lastNameString);
+					String retrievedFirstName = rs.getString(FIRST_NAME);
+					String retrievedLastName = rs.getString(LAST_NAME);
 					retrievedRealtor = new Realtor(id, retrievedFirstName, retrievedLastName);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return retrievedRealtor;
@@ -156,8 +152,7 @@ public class RealtorRepository {
 			updatedRealtor = new Realtor(realtorId, realtorDTO.getFirstName(), realtorDTO.getLastName());
 			
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return updatedRealtor;
@@ -178,8 +173,7 @@ public class RealtorRepository {
 				throw new RealtorNotFoundException("Couldn't find that realtor in the database");
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 	}
 }

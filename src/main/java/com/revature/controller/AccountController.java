@@ -15,10 +15,10 @@ public class AccountController implements Controller {
 	
 	private AccountService accountService;
 	
-	String constantRealtorId = "realtorid";
-	String constantAccountId = "accountid";
-	String accountIdUrl = "/realtors/:realtorid/accounts/:accountid";
-	String accountUrl = "/realtors/:realtorid/accounts";
+	public static final String REALTOR_ID = "realtorid";
+	public static final String ACCOUNT_ID = "accountid";
+	public static final String ACCOUNT_ID_URL = "/realtors/:realtorid/accounts/:accountid";
+	public static final String ACCOUNT_URL = "/realtors/:realtorid/accounts";
 	
 	public AccountController() {
 		this.accountService = new AccountService();
@@ -26,7 +26,7 @@ public class AccountController implements Controller {
 
 	private Handler addAccount = ctx -> {
 		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);
-		String realtorId = ctx.pathParam(constantRealtorId);
+		String realtorId = ctx.pathParam(REALTOR_ID);
 
 		Account insertedAccount = this.accountService.addAccount(realtorId, accountDTO);
 
@@ -35,7 +35,7 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler getAllAccounts = ctx -> {
-		String realtorId = ctx.pathParam(constantRealtorId);
+		String realtorId = ctx.pathParam(REALTOR_ID);
 		String aLT = ctx.queryParam("amountLessThan");
 		String aGT = ctx.queryParam("amountGreaterThan");
 		
@@ -52,8 +52,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler getAccountById = ctx -> {
-		String id1 = ctx.pathParam(constantRealtorId);
-		String id2 = ctx.pathParam(constantAccountId);
+		String id1 = ctx.pathParam(REALTOR_ID);
+		String id2 = ctx.pathParam(ACCOUNT_ID);
 		
 		Account account = accountService.getAccountById(id1, id2);
 		
@@ -62,8 +62,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler updateAccount = ctx -> {
-		String id1 = ctx.pathParam(constantRealtorId);
-		String id2 = ctx.pathParam(constantAccountId);
+		String id1 = ctx.pathParam(REALTOR_ID);
+		String id2 = ctx.pathParam(ACCOUNT_ID);
 		PostAccountDTO accountDTO = ctx.bodyAsClass(PostAccountDTO.class);
 		
 		Account account = this.accountService.updateAccount(id1, id2, accountDTO);
@@ -73,8 +73,8 @@ public class AccountController implements Controller {
 	};
 	
 	private Handler deleteAccount = ctx -> {
-		String id1 = ctx.pathParam(constantRealtorId);
-		String id2 = ctx.pathParam(constantAccountId);
+		String id1 = ctx.pathParam(REALTOR_ID);
+		String id2 = ctx.pathParam(ACCOUNT_ID);
 		
 		this.accountService.deleteAccount(id1, id2);
 		
@@ -83,11 +83,11 @@ public class AccountController implements Controller {
 	
 	@Override
 	public void mapEndpoints(Javalin app) {
-		app.post(accountUrl, addAccount);
-		app.get(accountUrl, getAllAccounts);
-		app.get(accountIdUrl, getAccountById);
-		app.put(accountIdUrl, updateAccount);
-		app.delete(accountIdUrl, deleteAccount);
+		app.post(ACCOUNT_URL, addAccount);
+		app.get(ACCOUNT_URL, getAllAccounts);
+		app.get(ACCOUNT_ID_URL, getAccountById);
+		app.put(ACCOUNT_ID_URL, updateAccount);
+		app.delete(ACCOUNT_ID_URL, deleteAccount);
 	}
 	
 }

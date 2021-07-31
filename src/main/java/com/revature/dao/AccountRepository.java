@@ -18,11 +18,11 @@ public class AccountRepository {
 	
 	private Connection connection;
 	
-	String accountType = "account_type";
-	String amount = "amount";
-	String exceptionMessage = "Exception message: ";
-	String somethingWentWrongWhenTryingToGetAConnection = "Something went wrong when trying to get a connection. ";
-	String somethingWentWrongWithTheDatabase = "Something went wrong with the database. ";
+	public static final String ACCOUNT_TYPE = "account_type";
+	public static final String AMOUNT = "amount";
+	public static final String EXCEPTION_MESSAGE = "Exception message: ";
+	public static final String CONNECTION_EXCEPTION = "Something went wrong when trying to get a connection. ";
+	public static final String DATABASE_EXCEPTION = "Something went wrong with the database. ";
 	
 	public AccountRepository() {
 		super();
@@ -46,7 +46,7 @@ public class AccountRepository {
 			int recordsAdded = pstmt.executeUpdate();
 
 			if (recordsAdded != 1) {
-				throw new DatabaseException("Couldn't add an account to the database");
+				throw new DatabaseException("Couldn't add an account to the database.");
 			}
 
 			try (ResultSet rs = pstmt.getGeneratedKeys()) {
@@ -54,12 +54,11 @@ public class AccountRepository {
 					int id = rs.getInt(1);
 					newAccount = new Account(id, accountDTO.getAccountType(), accountDTO.getAmount());
 				} else {
-					throw new DatabaseException("Account id was not generated, and therefore adding an account failed");
+					throw new DatabaseException("Account id was not generated, and therefore adding an account failed.");
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWithTheDatabase
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return newAccount;
@@ -79,15 +78,14 @@ public class AccountRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedAccountType = rs.getString(accountType);
-					double retrievedAmount = rs.getDouble(amount);
+					String retrievedAccountType = rs.getString(ACCOUNT_TYPE);
+					double retrievedAmount = rs.getDouble(AMOUNT);
 					retrievedAccount = new Account(id, retrievedAccountType, retrievedAmount);
 					allAccounts.add(retrievedAccount);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWithTheDatabase
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return allAccounts;
@@ -110,15 +108,14 @@ public class AccountRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedAccountType = rs.getString(accountType);
-					double retrievedAmount = rs.getDouble(amount);
+					String retrievedAccountType = rs.getString(ACCOUNT_TYPE);
+					double retrievedAmount = rs.getDouble(AMOUNT);
 					retrievedAccount = new Account(id, retrievedAccountType, retrievedAmount);
 					selectedAccounts.add(retrievedAccount);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWithTheDatabase
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 
 		return selectedAccounts;
@@ -138,14 +135,13 @@ public class AccountRepository {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					int id = rs.getInt("id");
-					String retrievedAccountType = rs.getString(accountType);
-					double retrievedAmount = rs.getDouble(amount);
+					String retrievedAccountType = rs.getString(ACCOUNT_TYPE);
+					double retrievedAmount = rs.getDouble(AMOUNT);
 					specifiedAccount = new Account(id, retrievedAccountType, retrievedAmount);
 				}
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return specifiedAccount;
@@ -168,14 +164,13 @@ public class AccountRepository {
 			int recordsUpdated = pstmt.executeUpdate();
 
 			if (recordsUpdated != 1) {
-				throw new NotRealtorsAccountException("This account does not belong to that realtor");
+				throw new NotRealtorsAccountException("This account does not belong to that realtor.");
 			}
 
 			updatedAccount = new Account(accountId, accountDTO.getAccountType(), accountDTO.getAmount());
 
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 		
 		return updatedAccount;
@@ -197,8 +192,7 @@ public class AccountRepository {
 				throw new NotRealtorsAccountException("This account does not belong to that realtor");
 			}
 		} catch (SQLException e) {
-			throw new DatabaseException(somethingWentWrongWhenTryingToGetAConnection
-			+ exceptionMessage + e.getMessage());
+			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
 		}
 	}
 }
