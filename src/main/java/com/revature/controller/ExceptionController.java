@@ -21,43 +21,43 @@ public class ExceptionController implements Controller {
 private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
 	
 	private ExceptionHandler<AccountNotFoundException> accountNotFoundExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("A user tried to retrieve an account, but it was not found. Exception message is {}", e.getMessage());
+		LOGGER.warn("The user tried to retrieve an account, but it was not found. Specifically, {}", e.getMessage());
 		ctx.status(404);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<AddAccountException> addAccountExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("Could not add account. Exception message is {}", e.getMessage());
+		LOGGER.warn("An account could not be added. Specifically, {}", e.getMessage());
 		ctx.status(400);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<AddRealtorException> addRealtorExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("Could not add realtor. Exception message is {}", e.getMessage());
+		LOGGER.warn("A realtor could not be added. Specifically, {}", e.getMessage());
 		ctx.status(400);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<BadParameterException> badParameterExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("A user provided a bad parameter. Exception message is {}", e.getMessage());
+		LOGGER.warn("The user provided a bad parameter. Specifically, {}", e.getMessage());
 		ctx.status(400);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<DatabaseException> databaseExceptionHandler = (e, ctx) -> {
-		LOGGER.error("Could not connect to database. Exception message is {}", e.getMessage());
+		LOGGER.error("The system could not connect to database. Specifically, {}", e.getMessage());
 		ctx.status(500);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<NotRealtorsAccountException> notRealtorsAccountExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("Could not access an account that belongs to another client. Exception message is {}", e.getMessage());
+		LOGGER.warn("The user cannot access an account that belongs to another realtor. Specifically, {}", e.getMessage());
 		ctx.status(400);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};
 	
 	private ExceptionHandler<RealtorNotFoundException> realtorNotFoundExceptionHandler = (e, ctx) -> {
-		LOGGER.warn("A user tried to retrieve a realtor, but it was not found. Exception message is {}", e.getMessage());
+		LOGGER.warn("The user tried to retrieve a realtor, but they were not found. Specifically, {}", e.getMessage());
 		ctx.status(404);
 		ctx.json(new MessageDTO(e.getMessage()));
 	};

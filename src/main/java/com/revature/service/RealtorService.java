@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.dao.RealtorRepository;
@@ -14,8 +15,8 @@ public class RealtorService {
 	
 	private RealtorRepository realtorRepository;
 	
-	public static final String BAD_PARAMETER = "Realtor id must be an int. User provided ";
-	public static final String REALTOR_ID = "Realtor with id of ";
+	public static final String BAD_PARAMETER = "a realtor's Id must be an integer. The user provided ";
+	public static final String REALTOR_ID = "a realtor with an Id of ";
 	public static final String NOT_FOUND = " was not found.";
 	
 	public RealtorService() {
@@ -26,76 +27,76 @@ public class RealtorService {
 		this.realtorRepository = realtorRepository;
 	}
 	
-	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException, AddRealtorException {
-		if (realtorRepository.getRealtorByName(realtorDTO.getFirstName(), realtorDTO.getLastName()) != null) {
-			throw new AddRealtorException("User tried to add a realtor that already exists with that name.");
-		}
+	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws AddRealtorException, DatabaseException {
+//		if (realtorRepository.getRealtorByName(realtorDTO.getFirstName(), realtorDTO.getLastName()) != null) {
+//			throw new AddRealtorException("the user tried to add a realtor that already exists with that name.");
+//		}
 		
 		if (realtorDTO.getFirstName().trim().equals("") || realtorDTO.getLastName().trim().equals("")) {
-			throw new AddRealtorException("User tried to add a realtor with a blank name.");
+			throw new AddRealtorException("the user tried to add a realtor with a blank name.");
+		} else {
+			return realtorRepository.addRealtor(realtorDTO);
 		}
-		
-		return realtorRepository.addRealtor(realtorDTO);
 	}
 	
-	public List<Realtor> getAllRealtors() throws RealtorNotFoundException, DatabaseException {
-			List<Realtor> realtors = realtorRepository.getAllRealtors();
+	public List<Realtor> getAllRealtors() throws DatabaseException, RealtorNotFoundException {
+	
+		List<Realtor> realtors = realtorRepository.getAllRealtors();
 			
-			if (realtors == null) {
-				throw new RealtorNotFoundException("There are no realtors in the database.");
-			}
-			
+		if (realtors == new ArrayList<Realtor>()) {
+			throw new RealtorNotFoundException("there are no realtors in the database.");
+		} else {
 			return realtorRepository.getAllRealtors();
-	}
-	
-	public Realtor getRealtorById(String stringId) throws DatabaseException, BadParameterException, RealtorNotFoundException {
-		try {
-			int realtorId = Integer.parseInt(stringId);
-			
-			Realtor realtor = realtorRepository.getRealtorById(realtorId);
-			
-			if (realtor == null) {
-				throw new RealtorNotFoundException(REALTOR_ID + realtorId + NOT_FOUND);
-			}
-			
-			return realtor;
-		} catch (NumberFormatException e) {
-			throw new BadParameterException(BAD_PARAMETER + stringId);
 		}
-	
 	}
 	
-	public Realtor updateRealtor(String stringId, PostRealtorDTO realtorDTO) throws DatabaseException, BadParameterException, RealtorNotFoundException {
+	public Realtor getRealtorById(String stringId) throws BadParameterException, DatabaseException, RealtorNotFoundException {
+		
 		try {
-			int id = Integer.parseInt(stringId);
+			int intId = Integer.parseInt(stringId);
 			
-			Realtor realtor = realtorRepository.updateRealtor(id, realtorDTO);
-			
-			if (realtor == null) {
-				throw new RealtorNotFoundException(REALTOR_ID + id + NOT_FOUND);
-			}
-			
-			return realtor;
-		} catch (NumberFormatException e) {
-			throw new BadParameterException(BAD_PARAMETER + stringId);
-		}
-	
-	}
-	
-	public void deleteRealtor(String stringId) throws DatabaseException, BadParameterException, RealtorNotFoundException {
-		try {
-			int id = Integer.parseInt(stringId);
-			
-			realtorRepository.deleteRealtor(id);
-			
-			if (stringId == null) {
-				throw new RealtorNotFoundException(REALTOR_ID + id + NOT_FOUND);
+			if (realtorRepository.getRealtorById(intId) == null) {
+				throw new RealtorNotFoundException(REALTOR_ID + intId + NOT_FOUND);
+			} else {
+				return realtorRepository.getRealtorById(intId);
 			}
 
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(BAD_PARAMETER + stringId);
 		}
-	
 	}
 	
+	public Realtor updateRealtor(String stringId, PostRealtorDTO realtorDTO) throws AddRealtorException, BadParameterException, DatabaseException, RealtorNotFoundException {
+		
+		try {
+			int intId = Integer.parseInt(stringId);
+			
+			if (realtorRepository.getRealtorById(intId) == null) {
+				throw new RealtorNotFoundException(REALTOR_ID + intId + NOT_FOUND);
+			} else if (realtorDTO.getFirstName().trim().equals("") || realtorDTO.getLastName().trim().equals("")) {
+				throw new AddRealtorException("the user tried to add a realtor with a blank name.");
+			} else {
+				return realtorRepository.updateRealtor(intId, realtorDTO);
+			}
+			
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(BAD_PARAMETER + stringId);
+		}
+	}
+	
+	public void deleteRealtor(String stringId) throws BadParameterException, DatabaseException, RealtorNotFoundException {
+		
+		try {
+			int intId = Integer.parseInt(stringId);
+			
+			if (realtorRepository.getRealtorById(intId) == null) {
+				throw new RealtorNotFoundException(REALTOR_ID + intId + NOT_FOUND);
+			} else {
+				realtorRepository.deleteRealtor(intId);
+			}
+
+		} catch (NumberFormatException e) {
+			throw new BadParameterException(BAD_PARAMETER + stringId);
+		}
+	}
 }

@@ -1,13 +1,10 @@
 package com.revature.model;
 
-import java.util.List;
-
 public class Realtor {
 	
 	private int id;
 	private String firstName;
 	private String lastName;
-	private List<Account> accounts;
 	
 	public Realtor() {
 		super();
@@ -44,19 +41,10 @@ public class Realtor {
 		this.lastName = lastName;
 	}
 
-	public List<Account> getAccounts() {
-		return accounts;
-	}
-
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((accounts == null) ? 0 : accounts.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -72,11 +60,6 @@ public class Realtor {
 		if (getClass() != obj.getClass())
 			return false;
 		Realtor other = (Realtor) obj;
-		if (accounts == null) {
-			if (other.accounts != null)
-				return false;
-		} else if (!accounts.equals(other.accounts))
-			return false;
 		if (firstName == null) {
 			if (other.firstName != null)
 				return false;
@@ -90,12 +73,6 @@ public class Realtor {
 		} else if (!lastName.equals(other.lastName))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Realtor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", accounts=" + accounts
-				+ "]";
 	}
 	
 }

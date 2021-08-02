@@ -19,7 +19,7 @@ public class RealtorRepository {
 	public static final String EXCEPTION_MESSAGE = "Exception message: ";
 	public static final String FIRST_NAME = "first_name";
 	public static final String LAST_NAME = "last_name";
-	public static final String DATABASE_EXCEPTION = "Something went wrong when trying to get a connection. ";
+	public static final String DATABASE_EXCEPTION = "something went wrong when trying to get a connection. ";
 	
 	public Realtor addRealtor(PostRealtorDTO realtorDTO) throws DatabaseException {
 		
@@ -34,16 +34,16 @@ public class RealtorRepository {
 			int recordsAdded = pstmt.executeUpdate();
 			
 			if (recordsAdded != 1) {
-				throw new DatabaseException("Couldn't add a realtor to the database.");
+				throw new DatabaseException("The user could not add a realtor to the database.");
 			}
 			
 			try (ResultSet rs = pstmt.getGeneratedKeys()) {
 				if (rs.next()) {
 					int id = rs.getInt(1);
 					newRealtor = new Realtor(id, realtorDTO.getFirstName(), realtorDTO.getLastName());
-					newRealtor.setAccounts(new ArrayList<>());
+					// newRealtor.setAccounts(new ArrayList<>());
 				} else {
-					throw new DatabaseException("Realtor Id was not generated, and therefore adding a realtor failed.");
+					throw new DatabaseException("a realtor's Id was not generated, and therefore adding a realtor to the database failed.");
 				}
 			}
 			
@@ -106,31 +106,31 @@ public class RealtorRepository {
 		
 	}
 	
-	public Realtor getRealtorByName(String firstName, String lastName) throws DatabaseException {
-		
-		Realtor retrievedRealtor = null;
-		String sql = "SELECT * FROM realtors r WHERE r.first_name = ? AND r.last_name = ?";
-		
-		try (Connection connection = ConnectionUtil.getConnection();
-		PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
-			pstmt.setString(1, firstName);
-			pstmt.setString(2, lastName);
-			
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					int id = rs.getInt("id");
-					String retrievedFirstName = rs.getString(FIRST_NAME);
-					String retrievedLastName = rs.getString(LAST_NAME);
-					retrievedRealtor = new Realtor(id, retrievedFirstName, retrievedLastName);
-				}
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
-		}
-		
-		return retrievedRealtor;
-		
-	}
+//	public Realtor getRealtorByName(String firstName, String lastName) throws DatabaseException {
+//		
+//		Realtor retrievedRealtor = null;
+//		String sql = "SELECT * FROM realtors r WHERE r.first_name = ? AND r.last_name = ?";
+//		
+//		try (Connection connection = ConnectionUtil.getConnection();
+//		PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+//			pstmt.setString(1, firstName);
+//			pstmt.setString(2, lastName);
+//			
+//			try (ResultSet rs = pstmt.executeQuery()) {
+//				if (rs.next()) {
+//					int id = rs.getInt("id");
+//					String retrievedFirstName = rs.getString(FIRST_NAME);
+//					String retrievedLastName = rs.getString(LAST_NAME);
+//					retrievedRealtor = new Realtor(id, retrievedFirstName, retrievedLastName);
+//				}
+//			}
+//		} catch (SQLException e) {
+//			throw new DatabaseException(DATABASE_EXCEPTION + EXCEPTION_MESSAGE + e.getMessage());
+//		}
+//		
+//		return retrievedRealtor;
+//		
+//	}
 	
 	public Realtor updateRealtor(int realtorId, PostRealtorDTO realtorDTO) throws DatabaseException, RealtorNotFoundException {
 		

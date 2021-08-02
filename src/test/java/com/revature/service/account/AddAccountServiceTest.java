@@ -1,4 +1,4 @@
-package com.revature.service;
+package com.revature.service.account;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -12,15 +12,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 
-import com.revature.util.ConnectionUtil;
 import com.revature.dao.AccountRepository;
 import com.revature.dto.PostAccountDTO;
 import com.revature.exceptions.AddAccountException;
 import com.revature.exceptions.BadParameterException;
 import com.revature.exceptions.DatabaseException;
 import com.revature.model.Account;
+import com.revature.service.AccountService;
+import com.revature.util.ConnectionUtil;
 
-public class AccountServiceTest {
+public class AddAccountServiceTest {
 	
 	private static AccountRepository mockAccountRepository;
 	private static Connection mockConnection;
@@ -42,7 +43,7 @@ public class AccountServiceTest {
 	}
 	
 	@Test
-	public void test_happyPath() throws BadParameterException, DatabaseException, AddAccountException {
+	public void addAccount_happyPath() throws BadParameterException, DatabaseException, AddAccountException {
 		
 		try(MockedStatic<ConnectionUtil> mockedConnectionUtil = mockStatic(ConnectionUtil.class)) {
 			mockedConnectionUtil.when(ConnectionUtil::getConnection).thenReturn(mockConnection);
@@ -53,12 +54,13 @@ public class AccountServiceTest {
 			
 			assertEquals(expected, actual);
 		}
+	}
+	
+	@Test
+	public void addAccount_blankAccountType() throws DatabaseException, BadParameterException {
 		
-	}
-	
-	@Test
-	public void test_blankAccountType() throws DatabaseException, BadParameterException {
 		PostAccountDTO blankAccountTypeDTO = new PostAccountDTO("", 0);
+		
 		try {
 			accountService.addAccount("1", blankAccountTypeDTO);
 			fail("AddAccountException was not thrown");
@@ -68,8 +70,10 @@ public class AccountServiceTest {
 	}
 	
 	@Test
-	public void test_blankAccountTypeSpace() throws DatabaseException, BadParameterException {
+	public void addAccount_blankAccountTypeSpace() throws DatabaseException, BadParameterException {
+		
 		PostAccountDTO blankAccountTypeDTO = new PostAccountDTO("    ", 0);
+		
 		try {
 			accountService.addAccount("1", blankAccountTypeDTO);
 			fail("AddAccountException was not thrown");
@@ -77,5 +81,4 @@ public class AccountServiceTest {
 			assertEquals("Account types cannot be blank", e.getMessage());
 		}
 	}
-	
 }

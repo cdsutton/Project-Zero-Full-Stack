@@ -21,8 +21,8 @@ public class AccountRepository {
 	public static final String ACCOUNT_TYPE = "account_type";
 	public static final String AMOUNT = "amount";
 	public static final String EXCEPTION_MESSAGE = "Exception message: ";
-	public static final String CONNECTION_EXCEPTION = "Something went wrong when trying to get a connection. ";
-	public static final String DATABASE_EXCEPTION = "Something went wrong with the database. ";
+	public static final String CONNECTION_EXCEPTION = "something went wrong when trying to get a connection. ";
+	public static final String DATABASE_EXCEPTION = "something went wrong with the database. ";
 	
 	public AccountRepository() {
 		super();
@@ -65,7 +65,7 @@ public class AccountRepository {
 		
 	}
 
-	public List<Account> getAllAccounts(int realtorId) throws DatabaseException {
+	public List<Account> getAllAccountsByRealtorId(int realtorId) throws DatabaseException {
 		
 		List<Account> allAccounts = new ArrayList<>();
 		Account retrievedAccount = null;
@@ -92,7 +92,7 @@ public class AccountRepository {
 		
 	}
 
-	public List<Account> getSelectAccounts(int realtorId, double lessThan, double greaterThan)
+	public List<Account> getSelectAccountsByRealtorId(int realtorId, double lessThan, double greaterThan)
 			throws DatabaseException {
 		
 		List<Account> selectedAccounts = new ArrayList<>();
@@ -122,7 +122,7 @@ public class AccountRepository {
 
 	}
 
-	public Account getAccountById(int realtorId, int accountId) throws DatabaseException {
+	public Account getSingleAccountByRealtorId(int realtorId, int accountId) throws DatabaseException {
 		
 		Account specifiedAccount = null;
 		String sql = "SELECT * FROM accounts WHERE realtor_id = ? AND id = ?";

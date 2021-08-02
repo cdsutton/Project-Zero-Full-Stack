@@ -2,6 +2,7 @@ package com.revature.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.util.ConnectionUtil;
@@ -14,16 +15,17 @@ import com.revature.exceptions.DatabaseException;
 import com.revature.exceptions.NotRealtorsAccountException;
 import com.revature.exceptions.RealtorNotFoundException;
 import com.revature.model.Account;
+import com.revature.model.Realtor;
 
 public class AccountService {
 	
 	private AccountRepository accountRepository;
 	
-	public static final String ACCOUNT = "Account with Id of ";
+	public static final String ACCOUNT = "an account with an Id of ";
 	public static final String AND = " and ";
-	public static final String REALTOR_INTEGER = "Realtor Id must be an int. User provided ";
-	public static final String REALTOR_ACCOUNT_INTEGER = "Realtor Id and Account Id must be an int. User provided ";
-	public static final String REALTOR = "Realtor with Id of ";
+	public static final String REALTOR_INTEGER = "a realtor's Id must be an integer. The user provided ";
+	public static final String REALTOR_ACCOUNT_INTEGER = "a realtor's Id and account Id must be an integer. The user provided ";
+	public static final String REALTOR = "a realtor with an Id of ";
 	public static final String NOT_FOUND = " was not found.";
 	
 	public AccountService() {
@@ -34,7 +36,8 @@ public class AccountService {
 		this.accountRepository = accountRepository;
 	}
 	
-	public Account addAccount(String stringId, PostAccountDTO accountDTO) throws BadParameterException, DatabaseException, AddAccountException {
+	public Account addAccount(String stringId, PostAccountDTO accountDTO) throws AddAccountException, BadParameterException, DatabaseException {
+		
 		try {
 			Connection connection = ConnectionUtil.getConnection();
 			this.accountRepository.setConnection(connection);
@@ -62,33 +65,33 @@ public class AccountService {
 
 	}
 	
-	public List<Account> getAllAccounts(String stringId) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
+	public List<Account> getAllAccountsByRealtorId(String stringId) throws AccountNotFoundException, BadParameterException, DatabaseException, RealtorNotFoundException {
+		
 		try {
-			int id = Integer.parseInt(stringId);
+			int intId = Integer.parseInt(stringId);
 			
-			List<Account> accounts = accountRepository.getAllAccounts(id);	
+			List<Account> accounts = accountRepository.getAllAccountsByRealtorId(intId);
 			
-			if (stringId == null) {
-				throw new RealtorNotFoundException(REALTOR + id + NOT_FOUND);
-			}
-			
-			if (accounts == null) {
+			if (accountRepository.getAllAccountsByRealtorId(intId) == null) {
+				throw new RealtorNotFoundException(REALTOR + intId + NOT_FOUND);
+			} else if (accounts == new ArrayList<Account>()) {
 				throw new AccountNotFoundException("There are no accounts in the database");
+			} else {
+				return accountRepository.getAllAccountsByRealtorId(intId);
 			}
 			
-			return accountRepository.getAllAccounts(id);
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(REALTOR_INTEGER + stringId);
 		}
 	}
 	
-	public List<Account> getSelectAccounts(String stringId, String aLT, String aGT) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
+	public List<Account> getSelectAccountsByRealtorId(String stringId, String aLT, String aGT) throws AccountNotFoundException, DatabaseException, BadParameterException, RealtorNotFoundException {
 		try {
 			int id = Integer.parseInt(stringId);
 			double lessThan = Double.parseDouble(aLT);
 			double greaterThan = Double.parseDouble(aGT);
 			
-			List<Account> accounts = accountRepository.getSelectAccounts(id, lessThan, greaterThan);	
+			List<Account> accounts = accountRepository.getSelectAccountsByRealtorId(id, lessThan, greaterThan);	
 			
 			if (stringId == null) {
 				throw new RealtorNotFoundException(REALTOR + id + NOT_FOUND);
@@ -105,12 +108,12 @@ public class AccountService {
 		}
 	}
 	
-	public Account getAccountById(String stringId1, String stringId2) throws DatabaseException, BadParameterException, AccountNotFoundException, RealtorNotFoundException {
+	public Account getSingleAccountByRealtorId(String stringId1, String stringId2) throws DatabaseException, BadParameterException, AccountNotFoundException, RealtorNotFoundException {
 		try {
 			int id1 = Integer.parseInt(stringId1);
 			int id2 = Integer.parseInt(stringId2);
 			
-			Account account = accountRepository.getAccountById(id1, id2);
+			Account account = accountRepository.getSingleAccountByRealtorId(id1, id2);
 			
 			if (stringId1 == null) {
 				throw new RealtorNotFoundException(REALTOR + id1 + NOT_FOUND);
@@ -127,22 +130,19 @@ public class AccountService {
 	
 	}
 	
-	public Account updateAccount(String stringId1, String stringId2, PostAccountDTO accountDTO) throws DatabaseException, BadParameterException, RealtorNotFoundException, AccountNotFoundException, NotRealtorsAccountException {
+	public Account updateAccount(String stringId1, String stringId2, PostAccountDTO accountDTO) throws AccountNotFoundException, BadParameterException, DatabaseException, NotRealtorsAccountException, RealtorNotFoundException {
 		try {
-			int id1 = Integer.parseInt(stringId1);
-			int id2 = Integer.parseInt(stringId2);
-			
-			Account account = accountRepository.updateAccount(id1, id2, accountDTO);
+			int intId1 = Integer.parseInt(stringId1);
+			int intId2 = Integer.parseInt(stringId2);
 			
 			if (stringId1 == null) {
-				throw new RealtorNotFoundException(REALTOR + id1 + NOT_FOUND);
+				throw new RealtorNotFoundException(REALTOR + intId1 + NOT_FOUND);
+			} else if (stringId2 == null) {
+				throw new AccountNotFoundException(ACCOUNT + intId2 + NOT_FOUND);
+			} else {
+				return accountRepository.updateAccount(intId1, intId2, accountDTO);
 			}
 			
-			if (stringId2 == null) {
-				throw new AccountNotFoundException(ACCOUNT + id2 + NOT_FOUND);
-			}
-			
-			return account;
 		} catch (NumberFormatException e) {
 			throw new BadParameterException(REALTOR_ACCOUNT_INTEGER + stringId1 + AND + stringId2);
 		}
